@@ -1,0 +1,79 @@
+{
+  "includes": [
+    "<string>",
+    "<vector>",
+    "<nlohmann/json.hpp>",
+    "<minter/minter_tx_config.h>",
+    "<minter/hash.h>",
+    "<minter/address.h>",
+    "<minter/public_key.h>",
+    "<minter/tx/tx_type.h>",
+    "minter/api/gate/base.h"
+  ],
+  "responses": [
+    {
+      "name": "gas_value",
+      "fields": [
+        [
+          "dev::bigint",
+          "gas"
+        ]
+      ]
+    },
+    {
+      "name": "commission_value",
+      "fields": [
+        [
+          "dev::bigint",
+          "commission",
+          "value"
+        ]
+      ]
+    },
+    {
+      "name": "exchange_sell_value",
+      "fields": [
+        [
+          "dev::bigint",
+          "will_get"
+        ],
+        [
+          "dev::bigint",
+          "commission"
+        ]
+      ]
+    },
+    {
+      "name": "exchange_buy_value",
+      "fields": [
+        [
+          "dev::bigint",
+          "will_pay"
+        ],
+        [
+          "dev::bigint",
+          "commission"
+        ]
+      ]
+    },
+    {
+      "name": "tx_count_value",
+      "fields": [
+        [
+          "dev::bigint",
+          "nonce",
+          "count"
+        ]
+      ]
+    },
+    {
+      "name": "tx_send_result",
+      "fields": [
+        [
+          "minter::hash_t",
+          "hash"
+        ]
+      ]
+    }
+  ]
+}

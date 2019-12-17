@@ -1,0 +1,36 @@
+{
+  "includes": [
+    "<string>",
+    "<vector>",
+    "<nlohmann/json.hpp>",
+    "<minter/minter_tx_config.h>",
+    "minter/api/liquidity/base.h"
+  ],
+  "responses": [
+    {
+      "name": "bip_price",
+      "fields": [
+        [
+          "uint64_t",
+          "price"
+        ],
+        [
+          "uint64_t",
+          "btc_price"
+        ],
+        [
+          "uint64_t",
+          "average_trades_price"
+        ],
+        [
+          "std::string",
+          "next_update"
+        ],
+        [
+          "float",
+          "delta"
+        ]
+      ]
+    }
+  ]
+}
