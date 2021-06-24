@@ -13,6 +13,7 @@
 /* #undef MINTER_TX_EXPORTING */
 /* #undef MINTER_EXPORT_SHARED */
 
+// clang-format off
 #define MINTER_CHAIN_ID minter::chain_id::mainnet
 #define MINTER_EXPLORER_API_V "v2"
 #define MINTER_GATE_API_V "v2"
@@ -24,6 +25,8 @@
 #define MINTER_WS_URL "wss://explorer-rtm.apps.minter.network/connection/websocket"
 #define MINTER_COIN_AVATAR_URL "https://my.apps.minter.network/api/v1/avatar/by/coin/"
 #define MINTER_ADDRESS_AVATAR_URL "https://my.apps.minter.network/api/v1/avatar/by/address/"
+
+// clang-format on
 
 #define HAVE_CXX_OPTIONAL
 
