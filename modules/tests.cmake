@@ -1,27 +1,30 @@
-set(gtest_force_shared_crt ${ENABLE_SHARED} CACHE BOOL "" FORCE)
-add_definitions(-DTEST_ROOT="${CMAKE_CURRENT_SOURCE_DIR}/tests")
-set(PROJECT_NAME_TEST ${PROJECT_NAME}-test)
-
 if (APPLE)
 	add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
 	add_definitions(-D__GLIBCXX__)
 endif ()
-if (MSVC)
-	string(REGEX REPLACE "\\/W4" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+
+enable_testing()
+add_definitions(-DMINTER_API_TESTING=1)
+
+add_executable(${PROJECT_NAME}-test
+               tests/main.cpp
+               tests/explorer_test.cpp)
+
+if (ENABLE_PVS)
+	include(PVS-Studio)
+	pvs_studio_add_target(TARGET ${PROJECT_NAME}.analyze ALL
+	                      OUTPUT FORMAT errorfile
+	                      CONFIG ${CMAKE_CURRENT_SOURCE_DIR}/pvs.cfg
+	                      ANALYZE ${PROJECT_NAME}-test
+	                      SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/include
+	                      LOG target.err)
 endif ()
 
-set(TEST_SOURCES
-    tests/main.cpp
-    tests/explorer_test.cpp)
-
-add_executable(${PROJECT_NAME_TEST} ${TEST_SOURCES})
 if (NOT MSVC)
-	target_compile_options(${PROJECT_NAME_TEST} PUBLIC -Wno-unused-parameter)
+	target_compile_options(${PROJECT_NAME}-test PRIVATE -Wno-missing-field-initializers)
 endif ()
-target_include_directories(${PROJECT_NAME_TEST} PRIVATE tests)
-target_link_libraries(${PROJECT_NAME_TEST} PRIVATE CONAN_PKG::gtest)
-target_link_libraries(${PROJECT_NAME_TEST} PUBLIC ${PROJECT_NAME})
-
+target_link_libraries(${PROJECT_NAME}-test CONAN_PKG::gtest)
+target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 
 if (WITH_COVERAGE)
 	set(COVERAGE_LCOV_EXCLUDES
@@ -34,11 +37,13 @@ if (WITH_COVERAGE)
 	    'v1'
 	    '4.9'
 	    )
-	include(CodeCoverage.cmake)
+	include(modules/CodeCoverage.cmake)
 	append_coverage_compiler_flags()
 	setup_target_for_coverage_lcov(
-		NAME ${PROJECT_NAME_TEST}-coverage
-		EXECUTABLE ${PROJECT_NAME_TEST}
-		DEPENDENCIES ${PROJECT_NAME}
+		NAME ${PROJECT_NAME}-coverage
+		EXECUTABLE ${PROJECT_NAME}-test
+		DEPENDENCIES ${PROJECT_NAME}-test
 	)
 endif ()
+
+add_test(NAME test-all COMMAND ${CMAKE_CURRENT_BINARY_DIR}/bin/${PROJECT_NAME}-test)

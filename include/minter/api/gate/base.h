@@ -12,38 +12,40 @@
 
 #include "minter/api/resp_gen.h"
 
+#include <unordered_map>
+
 namespace minter {
 namespace gate {
 
-CREATE_RESP4(
-    error_result,
-    int, code,
-    std::string, log,
-    std::string, value,
-    std::string, coin)
-
-template<class T>
-struct result {
-    T data;
-    error_result error;
+struct error_result {
+    int code = 0;
+    std::string message;
+    std::unordered_map<std::string, std::string> data;
 };
+
+struct result {
+    error_result error;
+
+    [[nodiscard]] bool is_ok() const {
+        return error.code == 0 && error.message.empty();
+    }
+};
+
+enum estimate_swap_from {
+    optimal,
+    bancor,
+    pool
+};
+NLOHMANN_JSON_SERIALIZE_ENUM(minter::gate::estimate_swap_from, {{minter::gate::estimate_swap_from::optimal, "optimal"},
+                                                                {minter::gate::estimate_swap_from::bancor, "bancor"},
+                                                                {minter::gate::estimate_swap_from::pool, "pool"}})
+
+MINTER_TX_API void from_json(const nlohmann::json& j, minter::gate::error_result& res);
+MINTER_TX_API void to_json(nlohmann::json& j, const minter::gate::error_result& resp);
+MINTER_TX_API void from_json(const nlohmann::json& j, minter::gate::result& res);
+MINTER_TX_API void to_json(nlohmann::json& j, const minter::gate::result& resp);
 
 } // namespace gate
 } // namespace minter
 
-namespace nlohmann {
-template<typename T>
-struct adl_serializer<minter::gate::result<T>> {
-    static void from_json(const json& j, minter::gate::result<T>& res) {
-        if (j.find("data") != j.end())
-            j.at("data").get_to<T>(res.data);
-        if (j.find("error") != j.end())
-            j.at("error").get_to<minter::gate::error_result>(res.error);
-    }
-
-    static void to_json(json& j, const minter::gate::result<T>& res) {
-    }
-};
-} // namespace nlohmann
-
-#endif //MINTER_GATE_BASE_H
+#endif // MINTER_GATE_BASE_H

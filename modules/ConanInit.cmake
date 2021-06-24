@@ -4,7 +4,7 @@ find_program(GREP_BIN grep)
 
 macro (check_conan_remote_exist NAME)
 	if (MSVC)
-		#it's not important, anyway, this function works wrong
+		#it'header_s not important, anyway, this function works wrong
 		set(CONAN_REMOTE_GREP_RES "${NAME}")
 	else ()
 		execute_process(

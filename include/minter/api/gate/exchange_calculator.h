@@ -9,7 +9,7 @@
 
 #ifndef MINTER_EXCHANGE_CALCULATOR_H
 #define MINTER_EXCHANGE_CALCULATOR_H
-#include "repository.h"
+#include "gate_repo.h"
 
 #include <functional>
 #include <httb/httb.h>

@@ -13,19 +13,33 @@
 #cmakedefine MINTER_TX_EXPORTING 1
 #cmakedefine MINTER_EXPORT_SHARED 1
 
+#cmakedefine MINTER_CHAIN_ID ${MINTER_CHAIN_ID }
+#cmakedefine MINTER_EXPLORER_API_V "${MINTER_EXPLORER_API_V}"
+#cmakedefine MINTER_GATE_API_V "${MINTER_GATE_API_V}"
+#cmakedefine MINTER_DEFAULT_COIN "${MINTER_DEFAULT_COIN}"
+#cmakedefine MINTER_EXPLORER_API "${MINTER_EXPLORER_API}"
+#cmakedefine MINTER_EXPLORER_FRONT "${MINTER_EXPLORER_FRONT}"
+#cmakedefine MINTER_EXPLORER_STATIC_URL "${MINTER_EXPLORER_STATIC_URL}"
+#cmakedefine MINTER_GATE_API "${MINTER_GATE_API}"
+#cmakedefine MINTER_WS_URL "${MINTER_WS_URL}"
+#cmakedefine MINTER_COIN_AVATAR_URL "${MINTER_COIN_AVATAR_URL}"
+#cmakedefine MINTER_ADDRESS_AVATAR_URL "${MINTER_ADDRESS_AVATAR_URL}"
+
+#cmakedefine HAVE_CXX_OPTIONAL
+
 #ifdef MINTER_EXPORT_SHARED
 #ifdef MINTER_TX_EXPORTING
-#   if _MSC_VER
-#       define MINTER_TX_API __declspec(dllexport)
-#   else
-#       define MINTER_TX_API __attribute__((visibility("default")))
-#   endif
+#if _MSC_VER
+#define MINTER_TX_API __declspec(dllexport)
 #else
-#   if _MSC_VER
-#       define MINTER_TX_API __declspec(dllimport)
-#   else
-#       define MINTER_TX_API
-#   endif
+#define MINTER_TX_API __attribute__((visibility("default")))
+#endif
+#else
+#if _MSC_VER
+#define MINTER_TX_API __declspec(dllimport)
+#else
+#define MINTER_TX_API
+#endif
 #endif
 #else
 #define MINTER_TX_API

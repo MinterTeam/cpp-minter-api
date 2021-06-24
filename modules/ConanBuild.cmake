@@ -22,7 +22,7 @@
 
 
 # This file comes from: https://github.com/conan-io/cmake-conan. Please refer
-# to this repository for issues and documentation.
+# to this base_repository for issues and documentation.
 
 # Its purpose is to wrap and launch Conan C/C++ Package Manager when cmake is called.
 # It will take CMake current settings (os, compiler, compiler version, architecture)
@@ -82,7 +82,7 @@ function (conan_cmake_settings result)
 	if (ARGUMENTS_ARCH)
 		set(_CONAN_SETTING_ARCH ${ARGUMENTS_ARCH})
 	endif ()
-	#handle -s os setting
+ #handle -header_s os setting
 	if (CMAKE_SYSTEM_NAME)
 		#use default conan os setting if CMAKE_SYSTEM_NAME is not defined
 		set(CONAN_SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
@@ -250,7 +250,7 @@ function (conan_cmake_detect_gnu_libcxx result)
 		endif ()
 	endif ()
 
-	# Check if there's any add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+	# Check if there'header_s any add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 	get_directory_property(defines DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} COMPILE_DEFINITIONS)
 	foreach (define ${defines})
 		if (define STREQUAL "_GLIBCXX_USE_CXX11_ABI=0")

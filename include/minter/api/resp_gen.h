@@ -46,8 +46,8 @@ struct adl_serializer<dev::bigint> {
         if (j.is_null()) {
             p = dev::bigint("0");
         } else if (j.is_number()) {
-            double d = j.get<double>();
-            p = dev::bigint(dev::bigdec18(d));
+            uint64_t d = j.get<uint64_t>();
+            p = dev::bigint(d);
         } else {
             p = dev::bigint(j.get<std::string>());
         }
@@ -99,6 +99,10 @@ struct adl_serializer<minter::hash_t> {
 };
 
 } // namespace nlohmann
+
+#define JSON_GET_TO(name, type, var)                        \
+    if (j.find(#name) != j.end() && !j.at(#name).is_null()) \
+    j.at(#name).get_to<type>(var)
 
 #define CREATE_RESP1(name, t1, f1)                            \
     struct name {                                             \
